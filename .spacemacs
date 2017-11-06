@@ -42,6 +42,7 @@ values."
      ;; auto-completion
      ;; better-defaults
      emacs-lisp
+     scala
      ;; git
      ;; markdown
      ;; org
