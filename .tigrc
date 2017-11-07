@@ -1,10 +1,14 @@
-# main view 
+#################################################
+# View
+#################################################
+
+## main view 
 set main-view = id date author:email-user commit-title:graph=yes,refs=yes
 
-# blame view
+## blame view
 set blame-view = date:default author:email-user id:yes,color line-number:yes,interval=1 text
 
-# pager
+## pager
 set pager-view = line-number:yes,interval=1 text
 set stage-view = line-number:yes,interval=1 text
 set log-view   = line-number:yes,interval=1 text
@@ -26,6 +30,9 @@ set ignore-case = true
 # マージ diff を表示する
 set diff-options = -m --first-parent
 
+# diff-highlight
+# set diff-highlight = true
+
 # マウスを有効にする
 set mouse = true
 
@@ -42,11 +49,11 @@ bind generic <Ctrl-g> refresh
 color diff-header default magenta
 color diff-chunk  black   white
 
-#
+#################################################
 # Vim-like-style keybindings for Tig
-#
+#################################################
 
-# Cursor
+## Cursor
 bind generic h scroll-left
 bind generic j move-down
 bind generic k move-up
@@ -72,11 +79,81 @@ bind generic @k :?^@@
 bind generic @- :toggle diff-context -1
 bind generic @+ :toggle diff-context +1
 
+## Commit
+
 bind generic c  none
 bind generic cc !git commit
 bind generic ca !?@git commit --amend --no-edit
 
 bind generic H view-help
 
-# Push
+bind generic F none
+bind generic F !git fetch
+
+## Push
 bind status P !git push origin
+
+## Reset
+bind generic ^ ?git reset --soft HEAD^
+
+## Diff
+# . で HEAD との diff
+bind main    . @sh -c "git diff %(commit) | tig"
+bind diff    . @sh -c "git diff %(commit) | tig"
+bind refs    . @sh -c "git diff %(branch) | tig"
+
+# # Alt-. で指定 commit ID との diff
+bind main    <Esc>. @sh -c "git diff %(commit)..%(prompt Enter commit ID: ) | tig"
+bind diff    <Esc>. @sh -c "git diff %(commit)..%(prompt Enter commit ID: ) | tig"
+bind refs    <Esc>. @sh -c "git diff %(branch)..%(prompt Enter branch name: ) | tig"
+
+## Reflog
+bind generic L @sh -c "git reflog --pretty=raw | tig --prettiy=raw"
+bind generic _ ?@git reset --hard HEAD@{"%(prompt Enter HEAD@{} number: ")}
+
+## Stash
+bind generic S @git stash save "%(prompt Enter stash comment: )"
+# bind diff Y @git stash pop %(stash)
+bind stash Y      ?@git stash pop %(stash)
+bind stash <Esc>y ?@git stash apply %(stash)
+bind stash D      ?@git stash drop %(stash)
+
+## Branch
+bind refs D      ?@git branch -d %(branch)
+bind main B       @git checkout -b "%(prompt Enter branch name: )" %(branch)
+bind refs B       @git checkout -b "%(prompt Enter branch name: )" %(branch)
+bind main <Esc>b  @git checkout -b "%(prompt Enter branch name: )" %(commit)
+bind generic -    @git checkout -
+
+## Merge
+bind main M      ?@git merge %(branch)
+bind diff M      ?@git merge %(branch)
+bind refs M      ?@git merge %(branch)
+bind main <Esc>m ?git merge %(commit)
+bind diff <Esc>m ?git merge %(commit)
+
+## Rebase
+bind main R      ?@git rebase %(branch)
+bind diff R      ?@git rebase %(branch)
+bind refs R      ?@git rebase %(branch)
+bind main <Esc>r ?@git rebase %(commit)
+bind diff <Esc>r ?@git rebase %(commit)
+
+## Rebase -i
+bind main I      ?@git rebase -i %(branch)
+bind diff I      ?@git rebase -i %(branch)
+bind refs I      ?@git rebase -i %(branch)
+bind main <Esc>i ?@git rebase -i %(commit)
+bind diff <Esc>i ?@git rebase -i %(commit)
+
+## Tag
+bind main T @git tag "%(prompt Enter tag name: )" %(commit)
+bind refs T @git tag "%(prompt Enter tag name: )" %(branch)
+
+## Chery-pick
+bind main K @git cherry-pick %(commit)
+bind diff K @git cherry-pick %(commit)
+
+# cherry-pick -n
+bind main <Esc>k @git cherry-pick -n %(commit)
+bind diff <Esc>k @git cherry-pick -n %(commit)
