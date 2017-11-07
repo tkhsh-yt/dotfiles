@@ -126,9 +126,9 @@ bind main <Esc>b  @git checkout -b "%(prompt Enter branch name: )" %(commit)
 bind generic -    @git checkout -
 
 ## Merge
-bind main M      ?@git merge %(branch)
-bind diff M      ?@git merge %(branch)
-bind refs M      ?@git merge %(branch)
+bind main M      ?git merge %(branch)
+bind diff M      ?git merge %(branch)
+bind refs M      ?git merge %(branch)
 bind main <Esc>m ?git merge %(commit)
 bind diff <Esc>m ?git merge %(commit)
 
@@ -140,11 +140,11 @@ bind main <Esc>r ?@git rebase %(commit)
 bind diff <Esc>r ?@git rebase %(commit)
 
 ## Rebase -i
-bind main I      ?@git rebase -i %(branch)
-bind diff I      ?@git rebase -i %(branch)
-bind refs I      ?@git rebase -i %(branch)
-bind main <Esc>i ?@git rebase -i %(commit)
-bind diff <Esc>i ?@git rebase -i %(commit)
+bind main I      ?git rebase -i %(branch)
+bind diff I      ?git rebase -i %(branch)
+bind refs I      ?git rebase -i %(branch)
+bind main <Esc>i ?git rebase -i %(commit)
+bind diff <Esc>i ?git rebase -i %(commit)
 
 ## Tag
 bind main T @git tag "%(prompt Enter tag name: )" %(commit)
